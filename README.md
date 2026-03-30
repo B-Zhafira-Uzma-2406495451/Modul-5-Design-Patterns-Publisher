@@ -128,3 +128,32 @@ Automated Testing juga mempermudah proses penjaminan mutu dengan menjalankan skr
 memastikan stabilitas status dan format respons API secara berkelanjutan. 
 
 #### Reflection Publisher-3
+1. pada tutorial case, saya menggunakan variasi push model
+
+2. Jika BambangShop menggunakan variasi Pull Model, keuntungannya terletak pada fleksibilitas, keamanan,
+dan efisiensi ukuran payload awal. Subscriber memiliki kendali penuh untuk hanya menarik informasi yang 
+benar-benar mereka butuhkan, sehingga tidak terbebani oleh penerimaan data JSON yang besar atau tidak
+relevan dari server. Selain itu, keamanan data lebih terjamin karena detail produk tidak langsung
+disebarkan secara terbuka melalui jaringan; subscriber harus secara proaktif melakukan request ke API 
+BambangShop untuk mendapatkan data spesifik tersebut. Dari sisi server BambangShop, pendekatan ini
+meringankan beban komputasi dan bandwidth awal karena server cukup memancarkan sinyal notifikasi singkat
+tanpa harus merakit dan mengirimkan seluruh detail produk ke ribuan subscriber sekaligus.
+
+Di sisi lain, kerugian dari Pull Model adalah tingginya risiko inefisiensi jaringan dan menurunnya 
+tingkat kecepatan informasi real-time. Ketika server mengirimkan sinyal pembaruan, ribuan subscriber
+bisa saja merespons secara serentak dengan mengirimkan request tarikan data ke server di detik yang sama,
+yang berpotensi memicu lonjakan trafik mendadak (bottleneck atau thundering herd) hingga membuat server
+kewalahan. Selain itu, karena adanya langkah tambahan di mana subscriber harus meminta data secara
+terpisah setelah menerima sinyal, penyampaian informasi menjadi tertunda dan tidak seinstan Push Model.
+Secara teknis, implementasinya juga jauh lebih rumit bagi kedua belah pihak; developer BambangShop harus
+menyiapkan dan merawat endpoint API tambahan khusus untuk melayani tarikan data, sementara subscriber
+harus menulis logika ekstra untuk melakukan request susulan tersebut.
+
+3. Jika kita tidak menggunakan multi-threading, program akan mengeksekusi pengiriman notifikasi secara
+sekuensial atau satu per satu, yang langsung memicu masalah performa. Karena pengiriman request HTTP POST
+melalui jaringan memakan waktu, antrean proses ini akan memblokir program utama dan sistem harus
+menunggu respons dari subscriber pertama secara utuh sebelum bisa mengirim pesan ke subscriber
+selanjutnya. Akibatnya, admin yang memicu aksi tersebut akan terjebak menatap layar loading yang panjang,
+dan aplikasi akan kehilangan skalabilitasnya. Bahkan, jika hanya ada satu URL subscriber yang bermasalah
+atau mati, ribuan antrean subscriber di belakangnya akan ikut tertunda menunggu proses timeout, yang
+pada akhirnya dapat melumpuhkan keseluruhan sistem saat jumlah pengguna semakin masif.
