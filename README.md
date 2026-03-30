@@ -48,15 +48,15 @@ You can install Postman via this website: https://www.postman.com/downloads/
     (You might want to use `cargo check` if you only need to verify your work without running the app.)
 
 ## Mandatory Checklists (Publisher)
--   [ ] Clone https://gitlab.com/ichlaffterlalu/bambangshop to a new repository.
+-   [✅] Clone https://gitlab.com/ichlaffterlalu/bambangshop to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Subscriber model struct.`
-    -   [ ] Commit: `Create Notification model struct.`
-    -   [ ] Commit: `Create Subscriber database and Subscriber repository struct skeleton.`
-    -   [ ] Commit: `Implement add function in Subscriber repository.`
-    -   [ ] Commit: `Implement list_all function in Subscriber repository.`
-    -   [ ] Commit: `Implement delete function in Subscriber repository.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
+    -   [✅] Commit: `Create Subscriber model struct.`
+    -   [✅] Commit: `Create Notification model struct.`
+    -   [✅] Commit: `Create Subscriber database and Subscriber repository struct skeleton.`
+    -   [✅] Commit: `Implement add function in Subscriber repository.`
+    -   [✅] Commit: `Implement list_all function in Subscriber repository.`
+    -   [✅] Commit: `Implement delete function in Subscriber repository.`
+    -   [✅] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
 -   **STAGE 2: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
@@ -77,6 +77,25 @@ This is the place for you to write reflections:
 ### Mandatory (Publisher) Reflections
 
 #### Reflection Publisher-1
+1. Dalam case program BambangShop, menggunakan satu Model struct saja sudah cukup jika aplikasi hanya
+memiliki satu cara atau satu jenis Subscriber. Namun, jika ke depannya Bambangshop memeiliki berbagai
+tipe notifikasi seperti EmailSubscriber, PushNotificationSubscriber, dan WebhookSubscriber, sebuah 
+interface atau trait in rust sangat diperulkan supaya program dapat menjalankan apa yang diperintahkan
+tanpa mengetahui detail cara kerja dari masing-masing notifikasi.
+
+2. Karena id in Program dan url in Subscriber bersifat unik, menggunakan Dashmap lebih baik daripada
+menggunakan Vec (list). Jika menggunakan Vec, setiap kali ada penambahkan subscriber baru dan harus
+mengecek apakah URL sudah ada agar tidak duplikat, menghapus, atau mencari subscriber tertentu, program
+harus mengecek elemen satu per satu dari awal. Seiring bertambahnya jumlah data, ini akan menjadi sangat
+lambat.
+
+3. Kita tetap membutuhkan DashMap dan tidak bisa sekadar menggantinya dengan implementasi Singleton
+Pattern.Singleton pattern hanya berfungsi untuk memastikan bahwa aplikasi memiliki satu instance variabel
+global yang sama, namun pola ini sama sekali tidak menangani masalah thread safety. Karena compiler Rust
+sangat ketat dalam mencegah data race, penerapan Singleton yang berisi data yang mutable akan langsung
+ditolak saat kompilasi jika hanya menggunakan HashMap standar. Oleh karena itu, kita wajib tetap
+menggunakan DashMap di dalam Singleton tersebut agar berbagai proses penambahan dan penghapusan
+subscriber dapat berjalan bersamaan dengan aman tanpa menyebabkan error pada memori aplikasi.
 
 #### Reflection Publisher-2
 
