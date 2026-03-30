@@ -58,12 +58,12 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [✅] Commit: `Implement delete function in Subscriber repository.`
     -   [✅] Write answers of your learning module's "Reflection Publisher-1" questions in this README.
 -   **STAGE 2: Implement services and controllers**
-    -   [ ] Commit: `Create Notification service struct skeleton.`
-    -   [ ] Commit: `Implement subscribe function in Notification service.`
-    -   [ ] Commit: `Implement subscribe function in Notification controller.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification service.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
+    -   [✅] Commit: `Create Notification service struct skeleton.`
+    -   [✅] Commit: `Implement subscribe function in Notification service.`
+    -   [✅] Commit: `Implement subscribe function in Notification controller.`
+    -   [✅] Commit: `Implement unsubscribe function in Notification service.`
+    -   [✅] Commit: `Implement unsubscribe function in Notification controller.`
+    -   [✅] Write answers of your learning module's "Reflection Publisher-2" questions in this README.
 -   **STAGE 3: Implement notification mechanism**
     -   [ ] Commit: `Implement update method in Subscriber model to send notification HTTP requests.`
     -   [ ] Commit: `Implement notify function in Notification service to notify each Subscriber.`
@@ -98,5 +98,33 @@ menggunakan DashMap di dalam Singleton tersebut agar berbagai proses penambahan 
 subscriber dapat berjalan bersamaan dengan aman tanpa menyebabkan error pada memori aplikasi.
 
 #### Reflection Publisher-2
+1. Kita perlu memisahkan Service dan Repository dari Model agar SRP atau Single Responsibility Principle
+terpenuhi. Adanya pemisahan tersebut akan mempermudah kita karena menghilangkan fat model yang dapat
+membuat kita pusing membaca sebuah file code yang panjang berisi segala program dan membuat testability
+menjadi lebih mudah
+
+2. Jika kita hanya menggunakan Model tanpa memisahkan lapisan Service dan Repository, program kita akan
+menerapkan anti-pattern yang disebut Fat Model atau God Object. Kompleksitas kode akan melonjak karena
+setiap entitas dipaksa mengambil alih tugas di luar fungsinya seperti, model Program harus mengatur akses
+database dan merakit objek notifikasi, Subscriber dibebani eksekusi HTTP request, dan Notification harus
+mengurus format data atau logging alih-alih sekadar menjadi wadah pesan murni (DTO). Akibat penggabungan
+ini, interaksi antar model menjadi sangat saling bergantung (tightly coupled), rapuh terhadap perubahan,
+tidak bisa diuji secara terisolasi, dan akhirnya membengkak menjadi spaghetti code. Oleh karena itu,
+pemisahan arsitektur menjadi lapisan Model, Service, dan Repository sangat krusial sebagai pembatas
+tegas agar setiap komponen hanya fokus mengerjakan satu tugas spesifiknya dengan rapi.
+
+3. Saya saat ini baru explore postman hanya sebagian kecil dari aplikasi namun adanya postman ini sangat
+membantu saya dalam mengerjakan BambangShop ini karena memungkinkan saya untuk berinteraksi langsung
+dengan server tanpa perlu membuat antarmuka pengguna terlebih dahulu. Melalui Postman, saya dapat
+melakukan simulasi request yang presisi pada endpoint seperti POST /notification/subscribe, menguji
+pengiriman payload JSON yang berisi URL dan nama, serta memvalidasi balasan server secara instan melalui
+indikator seperti status code 201 Created. Lebih jauh lagi, untuk Group Project atau future software
+engineering projects, fitur-fitur Postman seperti Collections dan Workspaces sangat membantu dalam
+merangkum semua skenario API menjadi "dokumentasi hidup" yang mudah dibagikan ke seluruh anggota tim.
+Selain itu, fitur Environment Variables menyederhanakan transisi pengujian antar lingkungan server,
+sementara Mock Servers sangat menyelamatkan alur kerja tim karena memungkinkan pengembang frontend
+langsung bekerja menggunakan respons tiruan tanpa harus menunggu backend selesai 100%. Terakhir, fitur
+Automated Testing juga mempermudah proses penjaminan mutu dengan menjalankan skrip otomatis untuk
+memastikan stabilitas status dan format respons API secara berkelanjutan. 
 
 #### Reflection Publisher-3
